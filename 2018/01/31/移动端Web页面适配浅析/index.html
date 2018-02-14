@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="移动端 适配," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="移动端Web页面适配浅析以前对移动端Web适配的原理一头雾水，对于几个概念dpr、ppi、viewport、device-width 等的概念用法逻辑总是有些迷茫。最近重新阅读了几篇好文章，也自己去查了一些相关的概念，对这一块再重新加深了理解。文章力求直观描述移动端Web页面的适配思路，以及适配过程中有必要了解的基础概念。部分用词、概念及公式使用可能不妥，望指正。 移动端适配的经验总结参考文章 从">
+<meta name="keywords" content="移动端 适配">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动端Web页面适配浅析">
+<meta property="og:url" content="http://yoursite.com/2018/01/31/移动端Web页面适配浅析/index.html">
+<meta property="og:site_name" content="Yue&#39;s Home">
+<meta property="og:description" content="移动端Web页面适配浅析以前对移动端Web适配的原理一头雾水，对于几个概念dpr、ppi、viewport、device-width 等的概念用法逻辑总是有些迷茫。最近重新阅读了几篇好文章，也自己去查了一些相关的概念，对这一块再重新加深了理解。文章力求直观描述移动端Web页面的适配思路，以及适配过程中有必要了解的基础概念。部分用词、概念及公式使用可能不妥，望指正。 移动端适配的经验总结参考文章 从">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-ea025b502bbb7502.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-a081cf5e2cc3c32e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-9cde4ce3f9a6cd05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-6d5a5de0842f5933.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-3e73c8f28fa5cedd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-1ca8e562d161cabe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-c40f575fc0ddc5aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-e02eac718e3c28ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-466428fc11fd490a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2354160-9e9923755aee553a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-02-13T08:53:52.572Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="移动端Web页面适配浅析">
+<meta name="twitter:description" content="移动端Web页面适配浅析以前对移动端Web适配的原理一头雾水，对于几个概念dpr、ppi、viewport、device-width 等的概念用法逻辑总是有些迷茫。最近重新阅读了几篇好文章，也自己去查了一些相关的概念，对这一块再重新加深了理解。文章力求直观描述移动端Web页面的适配思路，以及适配过程中有必要了解的基础概念。部分用词、概念及公式使用可能不妥，望指正。 移动端适配的经验总结参考文章 从">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2354160-ea025b502bbb7502.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/31/移动端Web页面适配浅析/"/>
+
+
+
+
+
+  <title>移动端Web页面适配浅析 | Yue's Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yue's Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/移动端Web页面适配浅析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yue Wu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yue's Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">移动端Web页面适配浅析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T16:38:01+08:00">
+                2018-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="移动端Web页面适配浅析"><a href="#移动端Web页面适配浅析" class="headerlink" title="移动端Web页面适配浅析"></a>移动端Web页面适配浅析</h1><p>以前对移动端Web适配的原理一头雾水，对于几个概念<code>dpr</code>、<code>ppi</code>、<code>viewport</code>、<code>device-width</code> 等的概念用法逻辑总是有些迷茫。最近重新阅读了几篇好文章，也自己去查了一些相关的概念，对这一块再重新加深了理解。文章力求直观描述移动端Web页面的适配思路，以及适配过程中有必要了解的基础概念。部分用词、概念及公式使用可能不妥，望指正。</p>
+<p>移动端适配的经验总结<strong>参考文章</strong></p>
+<p><a href="http://www.cnblogs.com/lyzg/p/4877277.html" target="_blank" rel="noopener">从网易与淘宝的font-size思考前端设计稿与工作流-流云诸葛</a></p>
+<p><a href="http://web.jobbole.com/90075/" target="_blank" rel="noopener">移动端适配方案(上)</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/25216275" target="_blank" rel="noopener">网易和淘宝移动WEB适配方案再分析-吴成琦</a></p>
+<h2 id="Native-适配过程"><a href="#Native-适配过程" class="headerlink" title="Native 适配过程"></a>Native 适配过程</h2><p>要了解移动Web端的适配思路，首先要知道终端都是如何进行适配的。</p>
+<p>无论是iOS还是Android端，设计通常给的设计稿标注是<code>dp</code>或者<code>pt</code>。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2354160-ea025b502bbb7502.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iOS 设计稿.png"></p>
+<p>为了明确<code>dp</code>以及<code>pt</code> 的概念，在这里对文章进行了一些总结，如果需要更为具体的内容，请参考如下文章:<a href="https://medium.com/uxabc/understanding-ui-units-8acdc0575388" target="_blank" rel="noopener">徹底理解 UI 及 Web 的尺寸單位：基本觀念-Taylor Hu</a></p>
+<h3 id="pt、dp是屏幕密度无关的单位"><a href="#pt、dp是屏幕密度无关的单位" class="headerlink" title="pt、dp是屏幕密度无关的单位"></a><code>pt</code>、<code>dp</code>是屏幕密度无关的单位</h3><p><code>pt</code>(point)是iOS开发的单位,<code>dp</code>(density-independent pixels )是google开发的单位。两者都是屏幕密度无关的单位，也就是和屏幕一个平方单位内实际的物理像素的个数(即屏幕密度)无关。</p>
+<p>再形象一点，以iOS为例，假设用标准的尺子画一个<strong>1cm*1cm</strong>的矩形框，那么无论是iPhone显示屏清晰度不同的第一代低清显示屏，还是iPhoneX的超视网膜高清屏，框出来的屏幕面积都是<strong>1cm^2</strong>。 iOS设计<code>pt</code>单位就是这么一个思路，你可以把<code>pt</code>想象成毫米，微米等绝对长度单位，是一个与设备物理像素无关的单位。这样一来，如果我们假设<code>1pt</code> = <em>1cm</em> 且iPhone6设计稿中一个按钮的宽度是<code>10pt</code>，那么就意味着在任何屏幕密度的iPhone屏幕上，这个按钮都为<em>10cm</em>宽。</p>
+<p>实际苹果公司在定义<code>pt</code>单位的时候，就是以<strong>第一代屏幕(iPhone3GS)为基准</strong>，第一代屏幕(iPhone3GS)的一个物理的像素点宽度为<code>1pt</code> ，设备像素比<code>dpr</code>(devicePixelRatio)为1。随着iPhone 屏幕的升级，<strong>1pt*1pt</strong> 内的物理像素点就会增多，屏幕密度也逐渐变高，到了iPhone4 ，<strong>1pt*1pt</strong> 内就包含了4个物理像素点，<code>dpr</code>就为2，到了iPhone6 plus，<strong>1pt*1pt</strong> 内理论上有9个物理像素点，<code>dpr</code>为3(为什么是理论上有9个物理像素点，之后再分析)。从这里就可以推导出设备像素比<code>dpr</code>的一个直观的概念，即$1pt = 设备像素比(dpr)*物理像素点宽$ 。</p>
+<p>回到上面的例子，这个例子产生一个问题：假设<code>1pt</code> = <em>1cm</em> ，iPhone6设计稿上一个按钮的宽度是<code>10pt</code>,那么无论在什么屏幕上，这个按钮都为<em>10cm</em>宽。这个宽度的按钮放到iPhone6以下的手机，例如iPhone5s，iPhone4等看起来不就会过宽么？没错，就是会过宽！所以实际iOS工程师在适配的过程中，会根据不同iPhone物理分辨率进行换算后的逻辑分辨率进行等比例的缩放。根据表格中的逻辑分辨率，iPhone6设计稿上一个按钮的宽度是<code>10pt</code>,那么如果需要适配iPhone5s，就需要根据iPhone5s逻辑分辨率宽度320及iPhone6逻辑分辨率宽度375将按钮进行等比例的缩放。<br>$iPhone5s 按钮的宽度 = iPhone6 按钮的宽度10pt*(iPhone5s逻辑分辨率宽度320/iPhone6逻辑分辨率宽度375)$ </p>
+<h3 id="iOS适配过程"><a href="#iOS适配过程" class="headerlink" title="iOS适配过程"></a>iOS适配过程</h3><p>下图是到目前为止，所有iPhone手机屏幕的尺寸、物理分辨率以及逻辑分辨率等详细参数的汇总：</p>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>屏幕尺寸</th>
+<th>分辨率(pt)</th>
+<th>Reader</th>
+<th>分辨率（px）</th>
+<th style="text-align:left">ppi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iPhone 3GS</td>
+<td>3.5吋</td>
+<td>320x480</td>
+<td>@1x</td>
+<td>320x480</td>
+<td style="text-align:left">163</td>
+</tr>
+<tr>
+<td>iPhone 4/4s</td>
+<td>3.5吋</td>
+<td>320x480</td>
+<td>@2x</td>
+<td>640x960</td>
+<td style="text-align:left">330</td>
+</tr>
+<tr>
+<td>iPhone 5/5s/5c</td>
+<td>4.0吋</td>
+<td>320x568</td>
+<td>@2x</td>
+<td>640x1136</td>
+<td style="text-align:left">326</td>
+</tr>
+<tr>
+<td>iPhone 6</td>
+<td>4.7吋</td>
+<td>375x667</td>
+<td>@2x</td>
+<td>750x1334</td>
+<td style="text-align:left">326</td>
+</tr>
+<tr>
+<td>iPhone 6Plus</td>
+<td>5.5吋</td>
+<td>414x736</td>
+<td>@3x</td>
+<td>1080x1920</td>
+<td style="text-align:left">401</td>
+</tr>
+<tr>
+<td>iPhone 6s</td>
+<td>4.7吋</td>
+<td>375x667</td>
+<td>@2x</td>
+<td>750x1334</td>
+<td style="text-align:left">326</td>
+</tr>
+<tr>
+<td>iPhone 6sPlus</td>
+<td>5.5吋</td>
+<td>414x736</td>
+<td>@3x</td>
+<td>1080x1920</td>
+<td style="text-align:left">401</td>
+</tr>
+<tr>
+<td>iPhone 7</td>
+<td>4.7吋</td>
+<td>375x667</td>
+<td>@2x</td>
+<td>750x1334</td>
+<td style="text-align:left">326</td>
+</tr>
+<tr>
+<td>iPhone 7Plus</td>
+<td>5.5吋</td>
+<td>414x736</td>
+<td>@3x</td>
+<td>1080x1920</td>
+<td style="text-align:left">401</td>
+</tr>
+<tr>
+<td>iPhone 8</td>
+<td>4.7吋</td>
+<td>375x667</td>
+<td>@2x</td>
+<td>750x1334</td>
+<td style="text-align:left">326</td>
+</tr>
+<tr>
+<td>iPhone 8Plus</td>
+<td>5.5吋</td>
+<td>414x736</td>
+<td>@3x</td>
+<td>1080x1920</td>
+<td style="text-align:left">401</td>
+</tr>
+<tr>
+<td>iPhone X</td>
+<td>5.8吋</td>
+<td>375x812</td>
+<td>@3x</td>
+<td>1125 x 2436</td>
+<td style="text-align:left">458</td>
+</tr>
+</tbody>
+</table>
+<p>我们会发现@1x屏幕到@2x 屏幕是完全满足<strong>1pt*1pt</strong> 范围内从包含1个物理像素点到包含了4个物理像素点的转换的，例如iPhone3GS到iPhone4、iPhone6、iPhone7、iPhone8；然而，iPhone6Plus、iPhone6sPlus、iPhone7Plus及iPhone8Plus似乎并不满足<strong>1pt*1pt</strong> 范围内从包含1个物理像素点到包含了9个物理像素点的转换。</p>
+<p>参考<a href="https://www.zhihu.com/question/25361043/answer/30666828" target="_blank" rel="noopener">godlaugh的回答</a> ，在这里将原理进行简单描述，我们以iPhone6Plus为例子进行深度的分析。</p>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>屏幕尺寸</th>
+<th>分辨率(pt)</th>
+<th>Reader</th>
+<th>分辨率（px）</th>
+<th>ppi</th>
+<th>dpi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iPhone 6</td>
+<td>4.7吋</td>
+<td>375x667</td>
+<td>@2x</td>
+<td>750x1334</td>
+<td>326</td>
+<td>163</td>
+</tr>
+<tr>
+<td>iPhone 6Plus</td>
+<td>5.5吋</td>
+<td>414x736</td>
+<td>@3x</td>
+<td>1080x1920</td>
+<td>401</td>
+<td>154</td>
+</tr>
+<tr>
+<td>iPhone 6Plus(a)</td>
+<td>5.5吋</td>
+<td>414x736</td>
+<td>@3x</td>
+<td>1242x2208</td>
+<td>461</td>
+<td>154</td>
+</tr>
+<tr>
+<td>iPhone 6Plus(b)</td>
+<td>5.5吋</td>
+<td>360x640</td>
+<td>@3x</td>
+<td>1080x1920</td>
+<td>401</td>
+<td>134</td>
+</tr>
+<tr>
+<td>iPhone 6Plus(c)</td>
+<td>5.5吋</td>
+<td>540x960</td>
+<td>@2x</td>
+<td>1080x1920</td>
+<td>401</td>
+<td>200</td>
+</tr>
+<tr>
+<td>iPhone 6Plus(d)</td>
+<td>6.7吋</td>
+<td>540x960</td>
+<td>@2x</td>
+<td>1080x1920</td>
+<td>326</td>
+<td>163</td>
+</tr>
+</tbody>
+</table>
+<p>iOS设计<code>pt</code>单位是从两个角度进行考虑：</p>
+<ol>
+<li>整个屏幕可现实的内容多少</li>
+<li>界面UI元素可点击的物理区域大小</li>
+</ol>
+<p>先理清<code>ppi</code>，<code>dpi</code>定义的区别</p>
+<p><strong>ppi</strong> : pixels per inch;</p>
+<p><strong>dpi</strong> : dots per inch,dot是指一个逻辑point。</p>
+<p>再详细分析：</p>
+<ol>
+<li><p><strong>iPhone 6Plus(b)</strong>方案：</p>
+<p>保持iphone 6Plus 现有物理分辨率<em>1080 </em> 1920<em> 不变，<code>dpr</code>为3。此时逻辑分辨率将缩小到</em>360 <em> 640</em>，逻辑分辨率的长宽都比iphone6 的逻辑分辨率小。</p>
+<p><strong>优点</strong>: iphone 6Plus(b)的屏幕密度更大，更为精细</p>
+<p><strong>缺点</strong>：实际可显示的内容却少于iphone6。</p>
+<p><strong>举例</strong>：iphone6 一行显示25个字符，iphone 6Plus(b) 仅能显示24个字符。</p>
+<p>​</p>
+</li>
+<li><p><strong>iPhone 6Plus(c)</strong>方案： </p>
+<p>保持iphone 6Plus 现有物理分辨率<em>1080 </em> 1920<em> 不变，<code>dpr</code>为2。此时逻辑分辨率将扩大到</em>540 <em> 960</em> 。在这种情况下，似乎应该选用iPhone 6Plus(d)方案，但是如果选用 iPhone 6Plus(d)，在保持长宽比为16 : 9的比例下，iPhone 6Plus(d)屏幕将达不可思议的6.7吋，因此，该方案不可行。</p>
+<p>实际苹果公司是根据市场需求，先确定plus手机的屏幕尺寸5.5吋，长宽比为16 : 9；再这个前提下，使用iPhone 6Plus(c)的方案(@2x)无可避免地需要相对iphone6 缩小每一个物理像素的大小。</p>
+<p><strong>优点</strong>: iphone 6Plus(c)的屏幕密度更大，实际可显示的内容多于iphone6。</p>
+<p><strong>缺点</strong>：所有UI元素的尺寸在屏幕上的实际物理面积一下就变小了。</p>
+<p><strong>举例</strong>：比如标签栏或导航栏按钮的物理高度只有原来的 81.5% (163/200)，点击面积就只有iPhone 6的 0.815*0.815=66.4%。</p>
+</li>
+<li><p><strong>iPhone 6Plus(a)</strong> 方案：</p>
+<p>该方案物理像素做到1242x2208，那么在5.5吋屏幕下<code>ppi</code>将达到461。</p>
+<p><strong>优点</strong>: iphone 6Plus(a)的屏幕密度更大，实际可显示的内容多于iphone6。</p>
+<p><strong>缺点</strong>：1)内存消耗巨大；</p>
+<p>​        2)电池消耗巨大；</p>
+<p>​        3)要做到 461ppi ，当前工艺可能存在一定难度</p>
+<p><strong>举例</strong>: iphoneX 就在真正意义上做到@3x的显示屏。</p>
+<p>​</p>
+</li>
+<li><p><strong>iPhone 6Plus</strong> 方案：</p>
+<p>苹果公司最终过渡选择了iphone 6Plus方案估计是因为在5.5吋屏幕大小要求以及<code>ppi</code>小于461的前提下，只能选用该方案。也就是说，理论意义上 iphone 6Plus 并不是一个@3x屏幕，而是一个@2.46x(401/326*2) 左右的屏幕。这个倍数对于切图造成了极大的困难，所以苹果为方便开发者用的是@3x的素材，然后再缩放到@2.46x上，实际上是缩放到2.46/3=83%。<br> ​</p>
+<h3 id="Android适配过程"><a href="#Android适配过程" class="headerlink" title="Android适配过程"></a>Android适配过程</h3><p>和iOS 一样，Google 也制定了一套密度等级规范屏幕参数，其中<code>xxxhdpi</code>屏幕就是我们所说的4K。</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>密度类型</th>
+<th>代表的分辨率（px）</th>
+<th>dpi</th>
+<th>Reader</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>中密度(mdpi)</td>
+<td>320x480</td>
+<td>160</td>
+<td>@1x</td>
+</tr>
+<tr>
+<td>高密度（hdpi）</td>
+<td>480x800</td>
+<td>240</td>
+<td>@1.5x</td>
+</tr>
+<tr>
+<td>超高密度（xhdpi）</td>
+<td>720x1280</td>
+<td>320</td>
+<td>@2x</td>
+</tr>
+<tr>
+<td>超超高密度（xxhdpi）</td>
+<td>1080x1920</td>
+<td>480</td>
+<td>@3x</td>
+</tr>
+<tr>
+<td>超超高密度（xxxhdpi）</td>
+<td>2160×3840</td>
+<td>640</td>
+<td>@4x</td>
+</tr>
+</tbody>
+</table>
+<p>根据iOS设计<code>pt</code>的思路，Google将mdpi的荧幕设置为基准点， mdpi荧幕上一个物理像素点的宽即为<code>1dp</code>。对于<code>dp</code>的理解以及屏幕尺寸参数之间的换算完全可以参考上一节原理。</p>
+<p>这里需要说明：iOS工程师在布局过程中经常会使用绝对布局，因为iphone的型号和屏幕数量都极为有限。但是Android工程师在适配的过程中，由于屏幕的种类实在太多，就不能使用绝对布局了，而是改用其他布局方式，例如相对布局等。</p>
+<p>举例来说，设计师给xhdpi屏幕设计稿一个按钮10dp宽，居中；那么Android工程师仅仅只需要关注这个10dp宽的按钮，距离屏幕边界的宽度，通过这样的方式去适配所有的屏幕。</p>
+<h2 id="移动端Web适配过程"><a href="#移动端Web适配过程" class="headerlink" title="移动端Web适配过程"></a>移动端Web适配过程</h2><p>上一章节我们详述了客户端屏幕参数的含义及设计的思路，在这一节，我们需要详述移动端的适配过程。</p>
+<p>很多文章对<strong>视口(viewport)</strong>这个概念的阐述都仅限于定义，幸而发现一篇好文章:</p>
+<p><a href="http://acgtofe.com/posts/2013/05/pixel-and-viewport" target="_blank" rel="noopener">像素与浏览器视口的细节—ACGTOFE</a></p>
+<p>文章本身直观的解释了各个视口的定义及其关系。本文基于该文章进行了总结，并添加演示代码，力求更简洁明了的表述<strong>视口(viewport)</strong>的概念及关系。</p>
+<h3 id="像素"><a href="#像素" class="headerlink" title="像素"></a>像素</h3><p>和native适配一样，iOS有<code>pt</code>单位，Android使用<code>dp</code>单位，对于前端开发人员来说，CSS pixel 的含义和<code>pt</code>以及<code>dp</code>是一样的，具体定义可参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/length#px" target="_blank" rel="noopener"><length></length></a>。</p>
+<p>也就是说，在普通屏幕上，开发PC端网页设定固定宽度为1000px，在retina屏幕的macbook pro上网页的宽度也是1000px。</p>
+<p>对于retina 化前端网页，可参考<a href="http://mir.aculo.us/2012/06/26/flowchart-how-to-retinafy-your-website/" target="_blank" rel="noopener">http://mir.aculo.us/2012/06/26/flowchart-how-to-retinafy-your-website/</a></p>
+<h3 id="视口"><a href="#视口" class="headerlink" title="视口"></a>视口</h3><p>在讨论移动端适配的过程中，我们要明确视口的定义及其之间的关系：<strong>布局视口</strong>与<strong>可视视口</strong>。</p>
+<p>以PC端浏览网页为例。</p>
+<p>在浏览过程中会产生两个视口：<strong>可视视口(visual viewport)</strong>及<strong>布局视口（layout viewport）</strong>。</p>
+<p>在100%显示比例下，</p>
+<p><strong>可视视口（visual viewport）</strong>通俗地说，就是用户浏览网页时浏览器框出来的区域。</p>
+<p><strong>布局视口（layout viewport）</strong>通俗地说，就是用户浏览的网页宽高包含的区域。</p>
+<p>黑线框出的区域就是<strong>可视视口（visual viewport）</strong>,而网页本身明显更长于<strong>可视视口（visual viewport）</strong>，所以网页所在的宽高包含的区域就是<strong>布局视口（layout viewport）</strong>。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2354160-a081cf5e2cc3c32e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="浏览器可视视口.png"></p>
+<p>那这两个视口之间有什么关系呢，我们尝试做一个试验。</p>
+<p>首先确定缩放比例为100%，可以看见google搜索的按钮高度为<code>36px</code>。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2354160-9cde4ce3f9a6cd05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="缩放比例为100%下的input.png"></p>
+<p>当缩放比例扩大到200%时，可以看见同一个搜索的按钮高度仍旧为<code>36px</code> 。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2354160-6d5a5de0842f5933.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="缩放比例为200%下的input.png"></p>
+<p>通过两张图直观的对比总结三点：</p>
+<ol>
+<li>缩放比例的改变给用户直观的放大缩小的效果；</li>
+<li><code>input</code>元素样式上高度并不会随着缩放比例的变化而变化；<br>3.<strong> 缩放比例改变了CSS 像素与设备物理像素之间的比例关系</strong>；</li>
+</ol>
+<p>通过我们对<strong>可视视口（visual viewport）</strong>以及<strong>布局视口（layout viewport）</strong>的直观理解，我们可以得出的一点就是，<em>缩放比例不会改变布局视口的宽度</em>，那么缩放比例到底是不是通过改变<strong>可视视口（visual viewport）</strong>来实现放大和缩小的效果的呢？答案是肯定的。</p>
+<p><strong>可视视口（visual viewport）</strong>的宽度可以通过如下代码获得<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.innerWidth</span><br></pre></td></tr></table></figure></p>
+<p>首先，最大化情况下，缩放比例为100%，可视视口宽度为<code>1920px</code>。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2354160-3e73c8f28fa5cedd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="max缩放比例100%下可视视口的宽度.png"></p>
+<p>其次，最大化情况下，缩放比例为200%，可视视口宽度为<code>960px</code>。<br><img src="http://upload-images.jianshu.io/upload_images/2354160-1ca8e562d161cabe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="max缩放比例200%下可视视口的宽度.png"></p>
+<p>然后，最大化情况下，缩放比例为50%，可视视口宽度为<code>3840px</code>。<br><img src="http://upload-images.jianshu.io/upload_images/2354160-c40f575fc0ddc5aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="max缩放比例50%下可视视口的宽度.png"></p>
+<p>最后，非最大化情况下，缩放比例为100%，可视视口宽度为<code>942px</code>。<br><img src="http://upload-images.jianshu.io/upload_images/2354160-e02eac718e3c28ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="非全屏缩放比例为100%可视视口的宽度.png"></p>
+<p>通过这组对比，我们可以得出<strong>可视视口</strong>的<strong>两个非常重要的特点</strong>。<br>​    <strong>1. 可视视口收到缩放比例的影响 </strong></p>
+<p>​    浏览器窗口相同的情况下，缩放比例越大，可视视口宽度越小；缩放比例越小，可视视口宽度越大。</p>
+<p>​    <strong>2. 可视视口与浏览器窗口的大小有关</strong></p>
+<p>​    缩放比例相同的情况下，浏览器窗口越大，可视视口宽度越大；浏览器窗口越小，可视视口宽度越小。</p>
+<h3 id="移动端访问网页时的视口"><a href="#移动端访问网页时的视口" class="headerlink" title="移动端访问网页时的视口"></a>移动端访问网页时的视口</h3><p>移动端访问页面的情况会相对复杂一些，我们来进行逐步的分解。</p>
+<p>如果我们不做任何<code>meta</code>设置，使用移动端访问一个正常的页面，将会出现页面被缩小，以至于文字无法阅读。这种状态，就好像拿着一个手机屏幕大小的框，然后为了能够将一个桌面端宽度的网页全部放到框里，于是框到网页距离被扩大，导致了页面缩小的情况。<em>另外，可以发现原始状态iphone6访问页面，html文档的宽度是980px，ipad pro 访问页面，html文档的宽度是1024px</em>。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2354160-466428fc11fd490a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="原始状态下的移动端访问.png"></p>
+<p>通过<code>&lt;meta name=&quot;viewport&quot; content=&quot;width=400&quot;&gt;</code> 将布局宽度设置成400px以后，我们看到页面被放大了，文字也能看的清楚了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2354160-9e9923755aee553a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="设置meta viewport标签后的移动端页面.png"></p>
+<p>通过上述实验说明了移动端访问网页的时候，<strong>布局视口(layout viewport)</strong>实际存在。且有以下几个特点：</p>
+<ol>
+<li><strong>衡量单位</strong>: CSS px。</li>
+<li><strong>默认值</strong>: 宽度有默认值，由手机浏览器定义。一般是768px ~ 1024px之间，常见默认值为980px。</li>
+<li><strong>移动端设置</strong>：可以通过<code>meta</code>的<code>viewport</code> 标签中<code>width</code>设定；例如  <code>&lt;meta name=&quot;viewport&quot; content=&quot;width=400&quot;&gt;</code></li>
+<li>缩放，滑动页面，翻转手机屏幕等均不影响布局视口。</li>
+<li>使用媒体查询时 max-width 和 min-width 的值指的也是布局视口的宽。</li>
+</ol>
+<p>获取布局视口宽度的js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.documentElement.clientWidth</span><br></pre></td></tr></table></figure></p>
+<p>将上文<strong>可视视口(visual viewport)</strong>进行总结。有以下几个特点:</p>
+<ol>
+<li><p><strong>衡量单位</strong>: CSS px。</p>
+</li>
+<li><p><strong>默认值</strong> ： 无。</p>
+</li>
+<li><p>受到屏幕宽度以及缩放大小的影响。</p>
+<p>用户手动缩放和在 <code>meta</code>标签中设置 <code>initial-scale</code> 的值都会改变可视视口的尺寸; 缩放比例也有默认的值，没有设置 initial-scale 时，浏览器会取适当的缩放比例使布局视口正好铺满屏幕即有 <strong>布局视口尺寸 = 可视视口尺寸</strong> 。</p>
+<p><strong>缩放比例是根据下面提到的理想视口而言的</strong> ,$缩放比例 = 理想视口尺寸 / 可视视口尺寸$</p>
+</li>
+</ol>
+<p>获取可视视口宽度的js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.innerWidth</span><br></pre></td></tr></table></figure></p>
+<p>通过对native适配过程的论述，我们已经知道无论是iOS系统手机还是Android系统手机，都会存在一个逻辑分辨率，而逻辑分辨率组成的视口就是<strong>理想视口(ideal viewport)</strong>，有以下几个特点：</p>
+<ol>
+<li><p><code>device-width</code>指的就是理想视口的宽度，例如<code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;</code></p>
+</li>
+<li><p>理想视口尺寸不能设定也不能改变，它只与设备物理像素、dpr、以及浏览器相关。</p>
+<p>$设备像素比(dpr) = 物理像素数 / 理想视口尺寸$</p>
+</li>
+</ol>
+<p>获取理想视口宽度的js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">screen.width</span><br></pre></td></tr></table></figure></p>
+<p>获取设备dpr的js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.devicePixelRatio</span><br></pre></td></tr></table></figure></p>
+<p>那么上述三种视口之间的转换就有一定的<strong>规律</strong>：</p>
+<ol>
+<li><p>将 meta 标签中的 width 设为 device-width 同时禁用手动缩放</p>
+<p><code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, user-scalable=no&quot;/&gt;</code></p>
+<p>可以使$ 布局视口尺寸 = 可视视口尺寸 = 理想视口尺寸$，此时 <strong>设备像素比 = 物理像素数 / 理想视口尺寸 = 物理像素数 / 布局视口尺寸</strong>，对iphone5，一个CSS像素对应4个物理像素。</p>
+</li>
+<li><p>为 initial-scale 设置任意合法的值同时禁用手动缩放就可以使<strong>布局视口尺寸 = 可视视口尺寸</strong></p>
+</li>
+<li><p>将 initial-scale 设置为 1 也可以使 <strong>布局视口尺寸 = 可视视口尺寸 = 理想视口尺寸</strong></p>
+</li>
+</ol>
+<h3 id="移动端Web适配方案"><a href="#移动端Web适配方案" class="headerlink" title="移动端Web适配方案"></a>移动端Web适配方案</h3><p>无论网易的移动Web适配方案，还是手淘的移动Web适配方案均采用<code>rem</code> 作为布局的单位。</p>
+<blockquote>
+<p>rem(font size of the root element)，指相对于根元素的字体大小的单位。</p>
+</blockquote>
+<h4 id="rem单位出现前的移动Web适配方案"><a href="#rem单位出现前的移动Web适配方案" class="headerlink" title="rem单位出现前的移动Web适配方案"></a>rem单位出现前的移动Web适配方案</h4><p>在<code>rem</code>单位出现以前，假设需求是适配iPhone4（320px），iPhone6(375px)，iPhone6 Plus(414px)，且用户浏览网页的时候，文字大小、图片、按钮大小都是适宜的：</p>
+<p>(1) iPhone4的时候，希望网页的内容文字大小12px=12*（320/320）px，按钮的大小是240px。</p>
+<p>(2)iphone6的时候，希望网页的内容文字大小14px=12*（375/320）px，按钮的大小是280px，等比缩放。</p>
+<p>(3)iphone6 Plus的时候，希望网页的内容文字大小15.5px=12*（414/320）px，按钮的大小是310px，等比缩 放。</p>
+<p>那么将采用以下的方案适配:</p>
+<p>iphone 4 下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, user-scalable=no, initial-scale=1.0 /&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>iPhone6 调整缩放比例， initial-scale=375/320 =1.18</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, user-scalable=no, initial-scale=1.18 /&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>iphone 6Plus 再调整缩放比例，initial-scale=414/320 =1.30</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, user-scalable=no, initial-scale=1.30 /&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>随着initial-scale的变大，网页被拉伸的越来越厉害，那么，大屏的移动端显示图片、文字等会出现不同程度的模糊。</p>
+<h4 id="网易移动Web适配方案"><a href="#网易移动Web适配方案" class="headerlink" title="网易移动Web适配方案"></a>网易移动Web适配方案</h4><ol>
+<li><p>设置理想视口=可视视口=布局视口</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"initial-scale=1,maximum-scale=1, minimum-scale=1"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如何计算得出html的font-size</p>
+<p>iphone6 的设计稿宽度为750px，100是期望换算比。即设计稿100px对应css 1rem；</p>
+<p>$设计稿可视视口宽度=750px/100$，所以$1rem =可视视口宽度/(100/750) $;</p>
+<p>可视视口宽度可以通过js 获取：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.innerWidth</span><br></pre></td></tr></table></figure>
+<p>html的font-size</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.documentElement.style.fontSize = <span class="built_in">window</span>.innerWidth / <span class="number">7.5</span> + <span class="string">'px'</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="手淘移动Web适配方案"><a href="#手淘移动Web适配方案" class="headerlink" title="手淘移动Web适配方案"></a>手淘移动Web适配方案</h4><ol>
+<li><p>手淘<a href="https://github.com/amfe/article/issues/17" target="_blank" rel="noopener">flexible</a>方案只对iOS设备进行dpr的判断，对于Android系列，都始终认为dpr为1。</p>
+</li>
+<li><p>取 dpr 的倒数作为缩放比例，对 iOS 设备 dpr = window.devicePixelRatio ，其他设备认为 dpr 为 1<br>对 iOS 设备，令上面提到的公式 缩放比例 = 理想视口尺寸 / 可视视口尺寸，设备像素比 = 物理像素数 / 理想视口尺寸 中 设备缩放比 = 1 / 缩放比例 可以推出 可视视口尺寸 = 物理像素数,同时由于没有设置 meta 标签的 width 值，有 布局视口尺寸 = 可视视口尺寸 = 物理像素数，这意味着布局视口中的像素单位是和物理像素一一对应的，css单位中1px严格等于一个物理像素。</p>
+<p>对非 iOS 设备，将 dpr 设为 1，缩放比例也为 1，和网易新闻的方案相同。</p>
+</li>
+<li>对于描述性文本，则根据data-dpr进行区分，使用px作为单位。</li>
+</ol>
+<p>另外手淘方案已经进行了更新，请<a href="https://www.w3cplus.com/css/vw-for-layout.html" target="_blank" rel="noopener">戳这里</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/移动端-适配/" rel="tag"># 移动端 适配</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/31/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Yue Wu</p>
+              <p class="site-description motion-element" itemprop="description">This is the blog of Yue Wu,recording everything happening in my "Hello World"</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#移动端Web页面适配浅析"><span class="nav-number">1.</span> <span class="nav-text">移动端Web页面适配浅析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Native-适配过程"><span class="nav-number">1.1.</span> <span class="nav-text">Native 适配过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pt、dp是屏幕密度无关的单位"><span class="nav-number">1.1.1.</span> <span class="nav-text">pt、dp是屏幕密度无关的单位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS适配过程"><span class="nav-number">1.1.2.</span> <span class="nav-text">iOS适配过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android适配过程"><span class="nav-number">1.1.3.</span> <span class="nav-text">Android适配过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#移动端Web适配过程"><span class="nav-number">1.2.</span> <span class="nav-text">移动端Web适配过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#像素"><span class="nav-number">1.2.1.</span> <span class="nav-text">像素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#视口"><span class="nav-number">1.2.2.</span> <span class="nav-text">视口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动端访问网页时的视口"><span class="nav-number">1.2.3.</span> <span class="nav-text">移动端访问网页时的视口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动端Web适配方案"><span class="nav-number">1.2.4.</span> <span class="nav-text">移动端Web适配方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#rem单位出现前的移动Web适配方案"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">rem单位出现前的移动Web适配方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网易移动Web适配方案"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">网易移动Web适配方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#手淘移动Web适配方案"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">手淘移动Web适配方案</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yue Wu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
